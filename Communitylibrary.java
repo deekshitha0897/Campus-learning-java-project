@@ -108,12 +108,15 @@ public class Communitylibrary
 
         do{
             System.out.println("\nLibrary Management System");
-            System.out.println("1. Display all books");
-            System.out.println("2. Search for a book");
-            System.out.println("3. Calculate average rating");
-            System.out.println("4. Sort books by year");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
+System.out.println("1. Display all books");
+System.out.println("2. Search for a book");
+System.out.println("3. Borrow a book");
+System.out.println("4. Return a book");
+System.out.println("5. Sort books by year");
+System.out.println("6. Calculate average rating");
+System.out.println("7. Display borrowing records");
+System.out.println("8. Exit");
+System.out.print("Enter your choice: ");
             choice = ss.nextInt();
             
             switch (choice) {
@@ -246,6 +249,232 @@ public class Communitylibrary
 
         ss.close();
     }
+
+    // Interface
+    interface LibraryOperations {
+        void borrowBook();
+        void returnBook();
+    }
+
+
+    // Parent Class
+    class Book {
+
+        // Encapsulation - private fields
+        private String title;
+        private int year;
+        private double rating;
+
+        // Static variable
+        static int totalBooks = 0;
+
+        // Constant
+        static final String LIBRARY_NAME = "Community Library";
+
+
+        // Default Constructor
+        Book() {
+            this.title = "Unknown";
+            this.year = 0;
+            this.rating = 0.0;
+            totalBooks++;
+        }
+
+
+        // Parameterized Constructor
+        Book(String title, int year, double rating) {
+            this.title = title;
+            this.year = year;
+            this.rating = rating;
+            totalBooks++;
+        }
+
+
+        // Constructor Overloading
+        Book(String title, int year) {
+            this.title = title;
+            this.year = year;
+            this.rating = 0.0;
+            totalBooks++;
+        }
+
+
+        // Getters - Accessors
+        public String getTitle() {
+            return title;
+        }
+
+        public int getYear() {
+            return year;
+        }
+
+        public double getRating() {
+            return rating;
+        }
+
+
+        // Setters - Mutators
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setYear(int year) {
+            this.year = year;
+        }
+
+        public void setRating(double rating) {
+            this.rating = rating;
+        }
+
+
+        // Instance Method
+        public void displayDetails() {
+            System.out.println("Title: " + title);
+            System.out.println("Year: " + year);
+            System.out.println("Rating: " + rating);
+        }
+
+
+        // Static Method
+        public static void displayTotalBooks() {
+            System.out.println("Total Books: " + totalBooks);
+        }
+
+
+        // toString()
+        @Override
+        public String toString() {
+            return title + " (Year: " + year +
+                   ", Rating: " + rating + ")";
+        }
+    }
+
+
+
+    // ======================= INHERITANCE =======================
+
+    // EBook IS-A Book
+    class EBook extends Book {
+
+        private double fileSize;
+
+
+        // Constructor
+        EBook(String title, int year, double rating, double fileSize) {
+
+            // Calling parent constructor
+            super(title, year, rating);
+
+            this.fileSize = fileSize;
+        }
+
+
+        // Method Overriding
+        @Override
+        public void displayDetails() {
+
+            System.out.println("E-Book Details:");
+            System.out.println("Title: " + getTitle());
+            System.out.println("Year: " + getYear());
+            System.out.println("Rating: " + getRating());
+            System.out.println("File Size: " + fileSize + " MB");
+        }
+    }
+
+
+
+    // ======================= ANOTHER CHILD CLASS =======================
+
+    // PrintedBook IS-A Book
+    class PrintedBook extends Book {
+
+        private int pages;
+
+
+        PrintedBook(String title, int year, double rating, int pages) {
+
+            super(title, year, rating);
+
+            this.pages = pages;
+        }
+
+
+        // Method Overriding
+        @Override
+        public void displayDetails() {
+
+            System.out.println("Printed Book Details:");
+            System.out.println("Title: " + getTitle());
+            System.out.println("Year: " + getYear());
+            System.out.println("Rating: " + getRating());
+            System.out.println("Pages: " + pages);
+        }
+    }
+
+
+
+    // ======================= INTERFACE IMPLEMENTATION =======================
+
+    class LibraryMember implements LibraryOperations {
+
+        private String memberName;
+        private int memberId;
+
+
+        LibraryMember(String memberName, int memberId) {
+
+            this.memberName = memberName;
+            this.memberId = memberId;
+        }
+
+
+        // Interface Method
+        @Override
+        public void borrowBook() {
+
+            System.out.println(
+                memberName + " (ID: " + memberId + ") borrowed a book."
+            );
+        }
+
+
+        // Interface Method
+        @Override
+        public void returnBook() {
+
+            System.out.println(
+                memberName + " (ID: " + memberId + ") returned a book."
+            );
+        }
+    }
+
+
+
+    // ======================= EXCEPTION CLASS =======================
+
+    // Custom checked exception
+    static class BookNotAvailableException extends Exception {
+
+        BookNotAvailableException(String message) {
+
+            super(message);
+        }
+    }
+
+
+
+    // =====================================================
+    // METHOD USING throws
+    // =====================================================
+
+    static void checkBookAvailability() throws BookNotAvailableException {
+        boolean available = false;
+
+        if (!available) {
+            throw new BookNotAvailableException(
+                "Requested book is not available."
+            );
+        }
+    }
 }
-   
 
